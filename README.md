@@ -2,10 +2,6 @@
 
 一个部署在 Cloudflare Pages 上的个人博客，采用哔哩哔哩主题色 (#FB7299) 搭配毛玻璃效果，动效流畅，支持自定义头像、文章详情页和 B站主页跳转。
 本项目是完全静态的 HTML/CSS/JS 实现，可轻松扩展为动态博客（结合 Cloudflare D1 / KV）。
-
-https://via.placeholder.com/800x400?text=博客预览+请运行index.html查看实际效果
-（上方为占位图，实际效果请运行 index.html 查看）
-
 ---
 
 ✨ 功能特点

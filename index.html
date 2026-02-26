@@ -192,5 +192,38 @@
       console.log('✨ 博客已加载 · 主色调 #FB7299 · 毛玻璃全开');
     })();
   </script>
+
+  <!-- 控制侧边栏的打开/关闭 -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('closeSidebar');
+
+    function openSidebar() {
+      sidebar.classList.add('open');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden'; // 禁止背景滚动
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+      document.body.style.overflow = ''; // 恢复滚动
+    }
+
+    menuToggle.addEventListener('click', openSidebar);
+    closeBtn.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+
+    // 可选：按 ESC 键关闭侧边栏
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeSidebar();
+      }
+    });
+  });
+  </script>
 </body>
 </html>

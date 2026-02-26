@@ -9,11 +9,30 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- 侧边栏 (毛玻璃) -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-title">导航</span>
+    <button class="close-btn" id="closeSidebar"><i class="fas fa-times"></i></button>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="index.html"><i class="fas fa-house"></i> 首页</a></li>
+    <li><a href="#"><i class="fas fa-folder-open"></i> 归档</a></li>
+    <li><a href="#"><i class="fas fa-tags"></i> 标签</a></li>
+    <li><a href="#"><i class="fas fa-user-astronaut"></i> 关于</a></li>
+    <li><a href="#"><i class="fas fa-cog"></i> 设置</a></li>
+  </ul>
+  <div class="sidebar-footer">
+    <p>© 2025 小电视の日常</p>
+  </div>
+</div>
+<!-- 遮罩层 (点击关闭侧边栏) -->
+<div class="overlay" id="overlay"></div>
   <div class="blog-container">
     <!-- 导航栏 · 毛玻璃 + 粉色调 -->
     <nav class="navbar glass" style="background: rgba(255,255,240,0.2);">
-      <div class="logo">
-        <i class="fab fa-bilibili"></i>
+      <div class="logo" id="sidebarToggle" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+        <i class="fab fa-bilibili" style="color: #FB7299;"></i>
         <span>小电视の日常</span>
       </div>
       <div class="nav-links">

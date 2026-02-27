@@ -140,10 +140,15 @@
 <body>
     <div class="admin-container">
         <!-- 左侧：文章列表 -->
-        <div class="panel">
+        <div class="panel left-panel">
             <h2><i class="fas fa-list"></i> 文章列表</h2>
             <div class="post-list" id="post-list">
-                <p style="text-align: center; color: #FB7299;">加载中...</p>
+                <!-- 动态加载的文章列表 -->
+            </div>
+            <div class="logout-container" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(251,114,153,0.3);">
+                <button id="logoutBtnLeft" class="btn" style="width: 100%; background: rgba(255,255,255,0.3); border: 1px solid #FB7299;">
+                    <i class="fas fa-sign-out-alt"></i> 注销
+                </button>
             </div>
         </div>
 

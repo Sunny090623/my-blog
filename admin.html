@@ -23,6 +23,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
+            min-height: 100vh;
         }
         .panel {
             background: rgba(255, 255, 255, 0.25);
@@ -112,6 +113,9 @@
             min-height: 120px;
             resize: vertical;
         }
+        #excerpt {
+            min-height: 80px;
+        }
         .form-row {
             display: flex;
             gap: 1rem;
@@ -153,6 +157,22 @@
             padding-top: 1rem;
             border-top: 1px solid rgba(251,114,153,0.3);
         }
+        /* 三个按钮并排等宽 */
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+        .action-buttons .btn,
+        .action-buttons label.btn {
+            flex: 1;                /* 等宽 */
+            min-width: 0;           /* 防止内容撑开 */
+            padding: 0.6rem 0.3rem; /* 稍作调整 */
+            font-size: 1rem;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
 /* 手机端适配 */
 @media (max-width: 768px) {
     .admin-container {
@@ -203,7 +223,22 @@
     #logoutBtnLeft {
         padding: 0.8rem;  /* 注销按钮更大，方便点击 */
     }
-}
+    /* 按钮组在窄屏时稍微缩小内边距，保证一行显示 */
+            .action-buttons .btn,
+            .action-buttons label.btn {
+                padding: 0.5rem 0.2rem;
+                font-size: 0.9rem;
+            }
+    /* 超窄屏（如折叠屏）允许换行 */
+        @media (max-width: 400px) {
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+            .action-buttons .btn,
+            .action-buttons label.btn {
+                flex: 1 1 100%;   /* 换行后占满宽度 */
+            }
+        }
 
     </style>
 </head>
@@ -245,12 +280,21 @@
                     <textarea id="excerpt" name="excerpt" placeholder="简短介绍..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>正文 (支持 HTML)</label>
+                    <label>正文 (支持Markdown / HTML)</label>
                     <textarea id="content" name="content" placeholder="<p>文章内容...</p>"></textarea>
                 </div>
-                <div style="display: flex; gap: 1rem;">
-                    <button type="submit" class="btn" style="flex: 2;">保存文章</button>
-                    <button type="button" class="btn" id="clear-btn" style="flex: 1;">清空表单</button>
+                <!-- 三个按钮并排等宽，放在表单底部 -->
+                <div class="action-buttons">
+                    <button type="button" id="newPostBtn" class="btn">
+                        <i class="fas fa-plus"></i> 新建
+                    </button>
+                    <label for="uploadMd" class="btn">
+                        <i class="fas fa-upload"></i> 上传 MD
+                    </label>
+                    <input type="file" id="uploadMd" accept=".md, .markdown, text/markdown" style="display: none;">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> 保存
+                    </button>
                 </div>
                 <div id="message" class="message"></div>
             </form>
@@ -267,8 +311,7 @@
         const excerptInput = document.getElementById('excerpt');
         const tagsInput = document.getElementById('tags');
         const messageDiv = document.getElementById('message');
-        const clearBtn = document.getElementById('clear-btn');
-
+    
         // 显示消息
         function showMessage(text, type) {
             messageDiv.textContent = text;
@@ -286,7 +329,7 @@
                 const posts = await response.json();
                 
                 if (posts.length === 0) {
-                    postList.innerHTML = '<p style="text-align: center;">暂无文章，点击右上角新增</p>';
+                    postList.innerHTML = '<p style="text-align: center;">暂无文章，点击右下角新增</p>';
                     return;
                 }
 
@@ -347,7 +390,12 @@
                     showMessage('删除成功', 'success');
                     loadPosts();  // 刷新列表
                     if (slugInput.value === slug) {
-                        clearForm();  // 如果当前编辑的是被删除的文章，清空表单
+                        // 清空表单
+                        slugInput.value = '';
+                        titleInput.value = '';
+                        contentInput.value = '';
+                        excerptInput.value = '';
+                        tagsInput.value = '';
                     }
                 } else {
                     showMessage(result.error || '删除失败', 'error');
@@ -390,6 +438,42 @@
                 showMessage('保存失败', 'error');
             }
         });
+        // 新建按钮
+        document.getElementById('newPostBtn').addEventListener('click', () => {
+            if (confirm('新建文章将清空当前表单，确定吗？')) {
+                clearForm();
+            }
+        });
+        // 上传 MD 文件
+        document.getElementById('uploadMd').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const allowedExts = ['.md', '.markdown'];
+            const fileName = file.name;
+            const ext = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+            if (!allowedExts.includes(ext) && file.type !== 'text/markdown') {
+                alert('只支持上传 .md 或 .markdown 文件');
+                e.target.value = '';
+                return;
+            }
+
+            const maxSize = 1 * 1024 * 1024;
+            if (file.size > maxSize) {
+                alert('文件大小不能超过 1MB');
+                e.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                contentInput.value = event.target.result;
+                showMessage('文件已加载到正文', 'success');
+            };
+            reader.onerror = () => alert('文件读取失败');
+            reader.readAsText(file, 'UTF-8');
+            e.target.value = '';
+        });
 
         // 初始加载
         loadPosts();
@@ -413,6 +497,9 @@
                 }
             }
         });
+
+        // 初始加载
+        loadPosts();
 
     </script>
 </body>

@@ -362,6 +362,57 @@
                 }
             }
         });
+/* 手机端适配 */
+@media (max-width: 768px) {
+    .admin-container {
+        grid-template-columns: 1fr;  /* 改为单列 */
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .panel {
+        padding: 1.5rem;  /* 适当缩小内边距 */
+    }
+
+    h2 {
+        font-size: 1.5rem;  /* 标题稍微缩小 */
+    }
+
+    .post-item {
+        padding: 1rem;  /* 增大列表项的点击区域 */
+        font-size: 1rem;
+    }
+
+    .post-item .slug {
+        font-size: 0.8rem;  /* 小屏下slug字号再小一点 */
+    }
+
+    .post-actions .btn {
+        padding: 0.5rem 0.8rem;  /* 按钮大小调整 */
+        font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 0.7rem;  /* 输入框稍微紧凑 */
+        font-size: 1rem;
+    }
+
+    .form-row {
+        flex-direction: column;  /* 如果表单中有并排字段，改为上下排列 */
+        gap: 0.5rem;
+    }
+
+    .logout-container {
+        margin-top: 0.8rem;
+        padding-top: 0.8rem;
+    }
+
+    #logoutBtnLeft {
+        padding: 0.8rem;  /* 注销按钮更大，方便点击 */
+    }
+}
     </script>
 </body>
 </html>

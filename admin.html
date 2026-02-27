@@ -135,6 +135,25 @@
             border: 1px solid #ff0000;
             color: #a80000;
         }
+        /* 在 <style> 中添加 */
+        .admin-container {
+            min-height: 100vh; /* 确保面板有高度参考 */
+        }
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .left-panel .post-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .logout-container {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(251,114,153,0.3);
+        }
+
     </style>
 </head>
 <body>

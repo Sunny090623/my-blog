@@ -70,5 +70,23 @@ export async function onRequest(context) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }
+// 密码验证函数（务必包含）
 async function verifyPassword(password, saltHex, storedHash) {
+    const salt = new Uint8Array(saltHex.match(/.{2}/g).map(byte => parseInt(byte, 16)));
+    const encoder = new TextEncoder();
+    const passwordData = encoder.encode(password);
+    const keyMaterial = await crypto.subtle.importKey('raw', passwordData, { name: 'PBKDF2' }, false, ['deriveBits']);
+    const derivedBits = await crypto.subtle.deriveBits(
+        {
+            name: 'PBKDF2',
+            salt: salt,
+            iterations: 100000,
+            hash: 'SHA-256'
+        },
+        keyMaterial,
+        256
+    );
+    const hashArray = Array.from(new Uint8Array(derivedBits));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex === storedHash;
 }

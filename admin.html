@@ -400,6 +400,14 @@
                 showMessage('删除失败', 'error');
             }
         };
+         // 清空表单函数（新建和内部使用）
+        function clearForm() {
+            slugInput.value = '';
+            titleInput.value = '';
+            contentInput.value = '';
+            excerptInput.value = '';
+            tagsInput.value = '';
+        }
 
         // 提交表单（新增/更新）
         form.addEventListener('submit', async (e) => {

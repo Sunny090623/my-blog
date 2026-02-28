@@ -267,9 +267,7 @@
             <h2><i class="fas fa-edit"></i> 编辑文章</h2>
             <form id="post-form">
                 <div class="form-row">
-                    <div class="form-group" style="flex: 1;">
-                        <label>文章标识（自动生成）</label>
-                        <input type="text" id="slug_display" class="slug-readonly" readonly value="" placeholder="保存后自动生成" value="">
+                    <input type="hidden" id="slug" name="slug" value="">
                     </div>
                     <div class="form-group">
                         <label>标签 (逗号分隔)</label>

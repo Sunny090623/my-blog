@@ -1,0 +1,12 @@
+<div id="author-posts"></div>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const authorName = urlParams.get('name');
+document.title = authorName + '的文章 · 小电视の日常';
+
+async function loadAuthorPosts() {
+    const res = await fetch(`/api/author/${encodeURIComponent(authorName)}`);
+    const posts = await res.json();
+    // 渲染文章列表...
+}
+</script>

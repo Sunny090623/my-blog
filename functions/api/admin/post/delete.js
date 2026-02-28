@@ -1,7 +1,22 @@
 // /functions/api/admin/post/delete.js
 import { getCurrentUserId } from '../../utils/auth';
+// 新增：获取用户角色
+async function getUserRole(userId, env) {
+    const { results } = await env.DB.prepare(
+        'SELECT role FROM users WHERE id = ?'
+    ).bind(userId).all();
+    return results.length ? results[0].role : 'author';
+}
+
 export async function onRequest(context) {
   const { request, env } = context;
+  // ... 方法检查
+    const userId = await getCurrentUserId(request, env);
+    if (!userId) return new Response(JSON.stringify({ error: '未登录' }), { status: 401 });
+
+    const role = await getUserRole(userId, env);
+    const isAdmin = role === 'admin';
+
   
   if (request.method !== 'POST') {
     return new Response(JSON.stringify({ error: '方法不允许' }), { status: 405 });
@@ -26,7 +41,7 @@ export async function onRequest(context) {
         if (results.length === 0) {
             return new Response(JSON.stringify({ error: '文章不存在' }), { status: 404 });
         }
-        if (results[0].author_id !== userId) {
+        if (!isAdmin && results[0].author_id !== userId) {
             return new Response(JSON.stringify({ error: '无权删除他人文章' }), { status: 403 });
         }
 

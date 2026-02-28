@@ -10,6 +10,7 @@ async function loadAuthors() {
             <span> (${author.post_count} 篇文章)</span>
         </div>`;
     }
-    document.getElementById('authors-list').innerHTML = html;
+    document.getElementById('authors-list').innerHTML = html || '<p>暂无作者</p>';
 }
+document.addEventListener('DOMContentLoaded', loadAuthors);
 </script>

@@ -1,0 +1,15 @@
+<div id="authors-list"></div>
+<script>
+async function loadAuthors() {
+    const res = await fetch('/api/authors');
+    const authors = await res.json();
+    let html = '';
+    for (let author of authors) {
+        html += `<div style="margin: 1rem 0;">
+            <a href="author.html?name=${encodeURIComponent(author.username)}" style="font-size: 1.5rem; color: #FB7299;">${author.username}</a>
+            <span> (${author.post_count} 篇文章)</span>
+        </div>`;
+    }
+    document.getElementById('authors-list').innerHTML = html;
+}
+</script>

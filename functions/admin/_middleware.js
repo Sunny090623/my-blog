@@ -1,9 +1,11 @@
 export async function onRequest(context) {
   const { request, env, next } = context;
   const url = new URL(request.url);
+  console.log('中间件拦截路径:', url.pathname);
 
   // 必须放行登录页
   if (url.pathname === '/admin/login.html') {
+    console.log('放行登录页');
     return await next();  // 直接通过，不检查会话
   }
 

@@ -45,6 +45,31 @@ body::before {
         padding: 0 1rem;    /* 左右留边距，避免文字贴边 */
         font-size: 1rem;    /* 可根据需要调整字体大小 */
     }
+    /* 新增作者页面移动端优化 */
+    .author-avatar {
+        width: 90px;
+        height: 90px;
+    }
+    .author-avatar i {
+        font-size: 3rem;
+    }
+    .author-name {
+        font-size: 1.5rem;
+    }
+    .author-card {
+        padding: 1.5rem;
+    }
+    .author-profile-name {
+        font-size: 1.8rem;
+    }
+    .author-profile-stats {
+        font-size: 1rem;
+    }
+    .author-card a {
+        padding: 0.4rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
 }
     @keyframes bgGlow {
       0% { filter: brightness(1); }

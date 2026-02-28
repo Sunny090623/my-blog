@@ -28,7 +28,7 @@ export async function onRequest(context) {
   try {
     // 解析请求体（表单数据或 JSON）
     const formData = await request.formData();
-    const slug = formData.get('slug');
+    let slug = formData.get('slug');
     const title = formData.get('title');
     const content = formData.get('content');
     const excerpt = formData.get('excerpt');

@@ -488,7 +488,7 @@
                         });
                         if (response.ok) {
                             // 注销成功，跳转到登录页
-                            window.location.href = '/admin/login.html';
+                            window.location.replace('/admin/login.html');
                         } else {
                             alert('注销失败，请重试');
                         }

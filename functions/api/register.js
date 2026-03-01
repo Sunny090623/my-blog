@@ -13,14 +13,17 @@ export async function onRequest(context) {
         if (!token) {
             return new Response(JSON.stringify({ error: '请完成验证码' }), { status: 400 });
         }
+        // 准备请求体，用于向 Cloudflare 验证 token
+        const turnstileBody = {
+          secret: env.TURNSTILE_SECRET, // ✅ 从环境变量中读取 Secret 密钥
+          response: token,
+          remoteip: request.headers.get('CF-Connecting-IP') || ''
+        };
+
         const turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                secret: '您的密钥',  // 从环境变量读取更安全
-                response: token,
-                remoteip: request.headers.get('CF-Connecting-IP') || ''
-            })
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(turnstileBody)
         });
         const turnstileData = await turnstileRes.json();
         if (!turnstileData.success) {

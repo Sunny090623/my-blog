@@ -1,4 +1,4 @@
-import { hashPassword } from '../utils/auth';  // 确保 auth.js 中有 hashPassword
+import { hashPassword } from './utils/auth';  // 确保 auth.js 中有 hashPassword
 
 export async function onRequest(context) {
     const { request, env } = context;

@@ -7,6 +7,7 @@ export async function onRequest(context) {
   if (url.pathname === '/admin/login.html' || url.pathname === '/admin/login') {
     return await next();  // 直接通过，不检查会话
   }
+  if (url.pathname.startsWith('/admin/') || url.pathname === '/users.html') {
 
   // 检查 Cookie
   const cookieHeader = request.headers.get('Cookie') || '';

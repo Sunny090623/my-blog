@@ -8,7 +8,24 @@ export async function onRequest(context) {
     }
 
     try {
-        const { username, password } = await request.json();
+        const { username, password, 'cf-turnstile-response': token } = await request.json();
+        // 验证 Turnstile token
+        if (!token) {
+            return new Response(JSON.stringify({ error: '请完成验证码' }), { status: 400 });
+        }
+        const turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                secret: '您的密钥',  // 从环境变量读取更安全
+                response: token,
+                remoteip: request.headers.get('CF-Connecting-IP') || ''
+            })
+        });
+        const turnstileData = await turnstileRes.json();
+        if (!turnstileData.success) {
+            return new Response(JSON.stringify({ error: '验证码验证失败' }), { status: 400 });
+        }
 
         if (!username || !password) {
             return new Response(JSON.stringify({ error: '用户名和密码不能为空' }), {

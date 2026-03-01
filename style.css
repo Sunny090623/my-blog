@@ -803,3 +803,91 @@ body::before {
       transform: scale(0.98);
       background: rgba(251,114,153,0.7);
     }
+/* ---------- 移动端文章内容优化 ---------- */
+@media (max-width: 768px) {
+    .post-content {
+        word-break: break-word;          /* 允许长单词换行 */
+        overflow-wrap: break-word;        /* 兼容性更好 */
+        padding: 0 0.5rem;                /* 增加左右内边距，避免贴边 */
+    }
+
+    /* 标题缩小 */
+    .post-content h1 {
+        font-size: 1.8rem;
+    }
+    .post-content h2 {
+        font-size: 1.5rem;
+    }
+    .post-content h3 {
+        font-size: 1.3rem;
+    }
+
+    /* 段落和列表 */
+    .post-content p,
+    .post-content li {
+        font-size: 1rem;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    /* 代码块 */
+    .post-content pre {
+        white-space: pre-wrap;            /* 允许代码块内换行 */
+        font-size: 0.9rem;
+        padding: 1rem;
+        overflow-x: auto;                  /* 如果内容太长，允许水平滚动 */
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .post-content code {
+        word-break: break-all;             /* 长代码强制换行 */
+        font-size: 0.9rem;
+    }
+
+    /* 表格 */
+    .post-content table {
+        display: block;
+        overflow-x: auto;                   /* 表格允许横向滚动 */
+        white-space: nowrap;                 /* 保持表格列不换行，但可滚动 */
+        max-width: 100%;
+        border-collapse: collapse;
+    }
+
+    .post-content th,
+    .post-content td {
+        padding: 0.5rem;
+        border: 1px solid rgba(251,114,153,0.3);
+        word-break: normal;
+    }
+
+    /* 图片 */
+    .post-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1rem auto;
+    }
+
+    /* 引用块 */
+    .post-content blockquote {
+        margin: 1rem 0;
+        padding: 0.5rem 1rem;
+        background: rgba(251,114,153,0.1);
+        border-left: 4px solid #FB7299;
+        word-break: break-word;
+    }
+
+    /* 链接 */
+    .post-content a {
+        word-break: break-all;               /* 长链接换行 */
+        color: #FB7299;
+    }
+
+    /* 数学公式（如果使用） */
+    .post-content .math {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0.5rem 0;
+    }
+}

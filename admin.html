@@ -533,10 +533,8 @@
         });
 
         // 注销按钮功能
-        const logoutBtn = document.getElementById('logoutBtnLeft');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', async () => {
-                if (confirm('确定要注销吗？')) {
+        document.getElementById('logoutBtnLeft').addEventListener('click', async () => {
+            if (confirm('确定要注销吗？')) {
                     try {
                         const response = await fetch('/api/logout', {
                             method: 'POST',

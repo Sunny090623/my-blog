@@ -31,7 +31,15 @@ export async function onRequest(context) {
             return new Response(JSON.stringify({ error: '不能删除当前登录用户' }), { status: 403 });
         }
 
-        await env.DB.prepare('DELETE FROM users WHERE id = ?').bind(id).run();
+        // 在一个事务中执行：先删除该用户的文章，再删除该用户（以及会话）
+        await env.DB.batch([
+            // 删除该用户的所有文章
+            env.DB.prepare('DELETE FROM posts WHERE author_id = ?').bind(id),
+            // 删除该用户的所有会话（可选，保持数据整洁）
+            env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(id),
+            // 最后删除用户
+            env.DB.prepare('DELETE FROM users WHERE id = ?').bind(id)
+        ]);
 
         return new Response(JSON.stringify({ success: true }), {
             headers: { 'Content-Type': 'application/json' }

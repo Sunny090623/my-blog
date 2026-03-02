@@ -186,20 +186,20 @@
         }
 
         // 生成整张卡片的 HTML
-        const cardHtml = `
-          <article class="article-card glass">
+      const card = `
+        <article class="article-card glass">
             <div class="card-meta">
-              <span><i class="far fa-calendar"></i> ${formattedDate}</span>
-              <span><i class="far fa-clock"></i> 刚刚</span>
+                <span class="card-date"><i class="far fa-calendar"></i> ${formattedDate}</span>
+                <span class="card-author" title="${post.author || '未知作者'}">
+                    <i class="fas fa-user"></i> ${post.author || '未知作者'}
+                </span>
             </div>
             <a href="post.html?slug=${post.slug}" style="text-decoration: none; color: inherit;">
-              <h3 class="card-title">${post.title}</h3>
+                <h3 class="card-title">${post.title}</h3>
             </a>
             <p class="card-excerpt">${post.excerpt || ''}</p>
-            <div class="card-tags">
-              ${tagsHtml}
-            </div>
-          </article>
+            <div class="card-tags">${tagsHtml}</div>
+        </article>
         `;
 
         // 将这张卡片的 HTML 添加到容器中

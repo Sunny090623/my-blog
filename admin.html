@@ -196,6 +196,16 @@
             cursor: not-allowed;
             color: #666;
         }
+        .btn-user {
+            background: rgba(251,114,153,0.15);
+            border: 1px dashed #FB7299;
+            color: #FB7299;
+        }
+        .btn-user:hover {
+            background: #FB7299;
+            color: white;
+            border-color: #FB7299;
+        }
 
 /* 手机端适配 */
 @media (max-width: 768px) {
@@ -273,7 +283,7 @@
         <!-- 标题行：左侧标题 + 右侧按钮（响应式换行） -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem;">
                 <h2 style="margin-bottom: 0;"><i class="fas fa-list"></i> 文章列表</h2>
-                <a href="/users.html" class="btn" style="background: rgba(251,114,153,0.15); border: 1px dashed #FB7299;">
+                <a href="/users.html" class="btn btn-user" style="background: rgba(251,114,153,0.15); border: 1px dashed #FB7299;">
                     <i class="fas fa-users"></i> 用户管理
                 </a>
             </div>

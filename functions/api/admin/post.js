@@ -59,7 +59,7 @@ export async function onRequest(context) {
                 return new Response(JSON.stringify({ error: '文章不存在' }), { status: 404 });
             }
             const authorId = results[0].author_id;
-            if (!isAdmin && authorId !== userId) {
+            if (role !== 'admin' && role !== 'superadmin' && results[0].author_id !== userId) {
                 return new Response(JSON.stringify({ error: '无权修改他人文章' }), { status: 403 });
             }
 

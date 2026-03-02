@@ -13,9 +13,9 @@ export async function onRequest(context) {
         return new Response(JSON.stringify({ error: '未登录' }), { status: 401 });
     }
 
-    let role; // 提前声明
+    let role;
     try {
-        // 获取用户角色
+        // 获取当前用户角色
         const { results: userResults } = await env.DB.prepare(
             'SELECT role FROM users WHERE id = ?'
         ).bind(userId).all();
@@ -24,7 +24,6 @@ export async function onRequest(context) {
         }
         role = userResults[0].role;
 
-    try {
         const formData = await request.formData();
         const slug = formData.get('slug');
 
@@ -41,7 +40,8 @@ export async function onRequest(context) {
         }
 
         const authorId = results[0].author_id;
-        if (role !== 'admin' && role !== 'superadmin' && results[0].author_id !== userId) {
+        // 允许 admin/superadmin 或作者本人删除
+        if (role !== 'admin' && role !== 'superadmin' && authorId !== userId) {
             return new Response(JSON.stringify({ error: '无权删除他人文章' }), { status: 403 });
         }
 

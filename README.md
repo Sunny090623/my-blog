@@ -65,8 +65,6 @@
 ├── schema.sql               # 数据库建表语句（users, sessions, posts）
 └── README.md                # 本文档
 
-```
-
 ## 🗄️ 数据库设计
 
 数据库使用 Cloudflare D1，包含三张表：

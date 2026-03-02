@@ -115,8 +115,9 @@
                     <label><i class="fas fa-check-circle" style="color:#FB7299; margin-right:0.3rem;"></i> 确认密码</label>
                     <input type="password" id="confirmPassword" placeholder="再次输入密码" required>
                 </div>
-                <div class="cf-turnstile" data-sitekey="0x4AAAAAACkYjCbNEpcylv56" data-theme="auto">
-                </div>
+                    <!-- 蜜罐字段：对用户隐藏 -->
+                    <input type="text" name="honeypot" style="display:none" autocomplete="off" tabindex="-1">
+>
                 
                
                 <button type="submit" class="btn-register">注册</button>

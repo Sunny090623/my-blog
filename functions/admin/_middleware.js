@@ -8,8 +8,7 @@ export async function onRequest(context) {
         return await next();
     }
 
-    // 需要保护的页面：所有 /admin/* 路径以及 /users.html
-    if (url.pathname.startsWith('/admin/') || url.pathname === '/users.html') {
+    
         // 获取 Cookie 中的 session_id
         const cookieHeader = request.headers.get('Cookie') || '';
         const cookies = Object.fromEntries(
@@ -39,7 +38,7 @@ export async function onRequest(context) {
             });
         }
 
-        const { user_id: userId, role } = results[0];
+        const { role } = results[0];
 
         // 权限检查：只有 admin 可以访问 admin.html 和 users.html
         if (url.pathname === '/admin.html' || url.pathname === '/users.html') {

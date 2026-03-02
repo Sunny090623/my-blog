@@ -9,11 +9,18 @@ export async function onRequest(context) {
     }
 
     const { results } = await env.DB.prepare(
-        `SELECT slug, title, excerpt, tags, updated_at
-         FROM posts
-         WHERE author_id = ?
-         ORDER BY updated_at DESC`
-    ).bind(userId).all();
+        SELECT 
+            p.slug, 
+            p.title, 
+            p.excerpt, 
+            p.tags, 
+            p.updated_at,
+            u.username as author,
+            p.author_id
+        FROM posts p
+        LEFT JOIN users u ON p.author_id = u.id
+        ORDER BY p.updated_at DESC
+    `).all();
 
     return new Response(JSON.stringify(results), {
         headers: { 'Content-Type': 'application/json' }

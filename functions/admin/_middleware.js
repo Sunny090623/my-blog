@@ -44,7 +44,7 @@ export async function onRequest(context) {
         if (url.pathname === '/admin.html' || url.pathname === '/users.html') 
     {
             if (role !== 'admin') {
-                // 普通用户重定向到首页
+                // 普通用户重定向到登录页
                 return new Response(null, {
                     status: 302,
                     headers: { Location: 'admin/login.html' }

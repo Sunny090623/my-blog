@@ -421,19 +421,23 @@ async function loadCurrentUser() {
 
                 let html = '';
                 posts.forEach(post => {
-                    html += `
-                        <div class="post-item">
-                            <div style="flex: 1;" onclick="editPost('${post.slug}')">
-                                <span class="title">${post.title}</span>
-                                <span class="slug">(${post.slug})</span>
-                            </div>
-                            <div class="post-actions">
-                                <button class="btn" onclick="editPost('${post.slug}')">编辑</button>
-                                <button class="btn btn-danger" onclick="deletePost('${post.slug}')">删除</button>
-                            </div>
-                        </div>
-                    `;
-                });
+    const displayInfo = (currentUserRole === 'superadmin') 
+        ? `<span class="slug">作者: ${post.author || '未知'}</span>`
+        : `<span class="slug">(${post.slug})</span>`;
+
+    html += `
+        <div class="post-item">
+            <div style="flex: 1;" onclick="editPost('${post.slug}')">
+                <span class="title">${post.title}</span>
+                ${displayInfo}
+            </div>
+            <div class="post-actions">
+                <button class="btn" onclick="editPost('${post.slug}')">编辑</button>
+                <button class="btn btn-danger" onclick="deletePost('${post.slug}')">删除</button>
+            </div>
+        </div>
+    `;
+});
                 postList.innerHTML = html;
             } catch (error) {
                 postList.innerHTML = '<p style="color: red;">加载失败</p>';

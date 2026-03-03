@@ -388,7 +388,7 @@
         const usernameSpan = document.getElementById('username');
         const suggestBtn = document.getElementById('suggestTagsBtn');
         const suggestedContainer = document.getElementById('suggested-tags');
-        const formData = new FormData(form);
+        
         // 在脚本开头添加变量
         let currentUserRole = null;
         let currentPost = null; // 当前编辑的文章 { slug, is_published }
@@ -694,7 +694,7 @@ async function loadCurrentUser() {
         // 第7步：保存草稿按钮事件
         saveDraftBtn.addEventListener('click', async () => {
             // 获取表单数据
-            
+            const formData = new FormData(form);
     
             // 显示保存中状态（可选）
             saveDraftBtn.disabled = true;

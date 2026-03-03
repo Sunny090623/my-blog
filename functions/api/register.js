@@ -28,7 +28,7 @@ export async function onRequest(context) {
         }
 
         const submitTime = parseInt(timestamp);
-        if (isNaN(submitTime) || now - submitTime < 2000) { // 小于2秒
+        if (isNaN(submitTime) || now - submitTime < 1000) { // 小于2秒
             return new Response(JSON.stringify({ error: '提交速度过快，请稍后再试' }), {
                 status: 403,
                 headers: { 'Content-Type': 'application/json' }

@@ -226,6 +226,13 @@
             background: #FB7299;
             color: white;
         }
+        .action-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+        .action-buttons .btn {
+            flex: 1;  /* 默认所有按钮等宽 */
+        }
 
 /* 手机端适配 */
 @media (max-width: 768px) {
@@ -420,6 +427,19 @@ async function loadCurrentUser() {
             if (userBtn) {
                 userBtn.style.display = user.role === 'admin' ? 'inline-block' : 'none';
             }
+            // 控制右侧按钮组（针对 superadmin）
+            const newBtn = document.getElementById('newPostBtn');
+            const uploadLabel = document.getElementById('uploadMdLabel');
+            const publishBtn = document.getElementById('publishBtn');
+            const saveBtn = document.getElementById('saveDraftBtn');
+
+            if (user.role === 'superadmin') {
+                // superadmin 隐藏新建、上传、发表
+                if (newBtn) newBtn.style.display = 'none';
+                if (uploadLabel) uploadLabel.style.display = 'none';
+                if (publishBtn) publishBtn.style.display = 'none';
+                // 保存按钮占满宽度（可选）
+                if (saveBtn) saveBtn.style.width = '100%';
         } else {
             usernameSpan.textContent = '访客';
         }
@@ -427,13 +447,9 @@ async function loadCurrentUser() {
         console.error('获取用户信息失败:', err);
         usernameSpan.textContent = '未知';
     }
-    if (currentUserRole === 'superadmin') {
-    // 隐藏新建和上传按钮
-    document.getElementById('newPostBtn').style.display = 'none';
-    document.getElementById('uploadMdLabel').style.display = 'none';
-    // 保存按钮保留
+
 }
-}
+
 
 
         // 加载文章列表

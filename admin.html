@@ -434,7 +434,8 @@
                 if (user.role === 'superadmin') {
                     // superadmin 只保留保存按钮
                     if (newPostBtn) newPostBtn.style.display = 'none';
-                    if (uploadMd) uploadMd.style.display = 'none';       // 隐藏文件输入
+                    if (uploadMdLabel) uploadMdLabel.style.display = 'none'; // 隐藏上传标签
+                    if (uploadMd) uploadMd.style.display = 'none';           // 隐藏文件输入
                     if (publishBtn) publishBtn.style.display = 'none';
                     // 保存按钮占满宽度
                     if (saveDraftBtn) {
@@ -444,10 +445,11 @@
                 } else {
                     // 其他角色显示所有按钮
                     if (newPostBtn) newPostBtn.style.display = '';
-                    if (uploadMd) uploadMd.style.display = '';           // 恢复显示
+                    if (uploadMdLabel) uploadMdLabel.style.display = ''; // 显示上传标签
+                    if (uploadMd) uploadMd.style.display = 'none';       // 隐藏文件输入（始终隐藏）
                     if (publishBtn) publishBtn.style.display = '';
-                    if (saveDraftBtn) saveDraftBtn.style.width = '';    // 恢复默认宽度
-                }
+                    if (saveDraftBtn) saveDraftBtn.style.width = '';     // 恢复默认宽度
+}
             } else {
                 usernameSpan.textContent = '访客';
             }

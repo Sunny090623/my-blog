@@ -22,8 +22,9 @@ export async function onRequest(context) {
         return new Response(JSON.stringify({ error: '无权访问' }), { status: 403 });
     }
 
+    // 查询所有用户，排除 role='superadmin'
     const { results } = await env.DB.prepare(
-        'SELECT id, username, created_at FROM users ORDER BY id ASC'
+        "SELECT id, username, created_at FROM users WHERE role != 'superadmin' ORDER BY id ASC"
     ).all();
 >>>>>>> 13ec8190b9cdf379ca0a14ec490da7131d115ebe
     return new Response(JSON.stringify(results), {

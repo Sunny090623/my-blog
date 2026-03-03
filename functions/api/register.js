@@ -27,8 +27,8 @@ export async function onRequest(context) {
             });
         }
 
-        const submitTime = parseInt(timestamp);
-        if (isNaN(submitTime) || now - submitTime < 1000) { // 小于2秒
+        const timeDiff = now - submitTime;
+        if (Math.abs(timeDiff) < 2000) { // 绝对值小于2秒才拦截
             return new Response(JSON.stringify({ error: '提交速度过快，请稍后再试' }), {
                 status: 403,
                 headers: { 'Content-Type': 'application/json' }

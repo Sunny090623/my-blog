@@ -562,6 +562,22 @@ async function loadCurrentUser() {
                 excerptInput.value = post.excerpt || '';
                 tagsInput.value = post.tags || '';
                 
+
+currentPost = { slug: post.slug, is_published: post.is_published };
+        
+        // 控制发表按钮
+        if (publishBtn) {
+            if (post.is_published) {
+                publishBtn.disabled = true;
+                publishBtn.style.opacity = 0.5;
+                publishBtn.title = '文章已发表，无需再次发表';
+            } else {
+                publishBtn.disabled = false;
+                publishBtn.style.opacity = 1;
+                publishBtn.title = '发表此草稿';
+            }
+        }
+
                 showMessage('已加载文章', 'success');
             } catch (error) {
                 showMessage('加载失败', 'error');

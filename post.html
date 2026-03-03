@@ -34,6 +34,7 @@
 
 <script>
     async function loadPost() {
+        
         const container = document.getElementById('post-container');
         if (!container) return;
 
@@ -90,8 +91,20 @@
         }
     }
 
+    // 返回上一页：点击导航栏左侧的“小电视の日常”区域
+document.addEventListener('DOMContentLoaded', function() {
+    const logo = document.querySelector('.logo');
+    if (logo) {
+        logo.addEventListener('click', function(e) {
+            e.preventDefault();          // 防止可能存在的默认跳转
+            window.history.back();       // 返回上一页
+        });
+    }
+});
+
     // 确保 DOM 加载完成后执行
     document.addEventListener('DOMContentLoaded', loadPost);
+    
 </script>
 </body>
 </html>

@@ -24,7 +24,7 @@
 ## 📁 文件结构详解
 
 项目根目录下的主要文件及文件夹说明：
-```
+
 ├── index.html               # 博客首页，动态加载所有文章卡片
 ├── post.html                # 文章详情页，使用 marked 渲染 Markdown
 ├── authors.html             # 作者列表页，显示所有注册作者
@@ -65,7 +65,7 @@
 ├── style.css                # 全局样式（毛玻璃、响应式、主色调）
 ├── schema.sql               # 数据库建表语句（users, sessions, posts）
 └── README.md                # 本文档
-```
+
 
 ## 🗄️ 数据库设计
 

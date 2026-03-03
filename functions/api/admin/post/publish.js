@@ -37,7 +37,7 @@ export async function onRequest(context) {
         const isPublished = results[0].is_published;
 
         // 权限：作者本人、admin、superadmin 可发表
-        if (role !== 'admin' && role !== 'superadmin' && authorId !== userId) {
+        if (role !== 'superadmin' && authorId !== userId) {
             return new Response(JSON.stringify({ error: '无权发表' }), { status: 403 });
         }
 

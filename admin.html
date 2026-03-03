@@ -312,8 +312,11 @@
             <div class="welcome-message glass">
                 <i class="fas fa-user-circle"></i> 你好，<span id="username">加载中...</span>！
             </div>
-            <div class="post-list" id="post-list">
-                <!-- 动态加载的文章列表 -->
+            <div class="post-list">
+                <h3 style="color:#FB7299; margin-bottom:0.5rem;">📄 已发表</h3>
+                <div id="published-posts" style="margin-bottom:1.5rem;"></div>
+                <h3 style="color:#FB7299; margin-bottom:0.5rem;">📝 草稿箱</h3>
+                <div id="draft-posts"></div>
             </div>
             <div class="logout-container" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(251,114,153,0.3);">
                 <button id="logoutBtnLeft" class="btn" style="width: 100%; background: rgba(255,255,255,0.3); border: 1px solid #FB7299;">
@@ -360,10 +363,11 @@
                 </div>
                 <!-- 三个按钮并排等宽，放在表单底部 -->
                 <div class="action-buttons">
-                    <button type="button" id="newPostBtn" class="btn"><i class="fas fa-plus"></i> 新建</button>
-                    <label for="uploadMd" id="uploadMdLabel" class="btn"><i class="fas fa-upload"></i> 上传 MD</label>
+                    <button type="button" id="newPostBtn" class="btn">新建</button>
+                    <label for="uploadMd" class="btn">上传</label>
                     <input type="file" id="uploadMd" accept=".md, .markdown, text/markdown" style="display: none;">
-                    <button type="submit" class="btn"><i class="fas fa-save"></i> 保存</button>
+                    <button type="button" id="saveDraftBtn" class="btn">保存</button>
+                    <button type="button" id="publishBtn" class="btn">发表</button>
                 </div>
                 <div id="message" class="message"></div>
             </form>
@@ -384,9 +388,12 @@
         const usernameSpan = document.getElementById('username');
         const suggestBtn = document.getElementById('suggestTagsBtn');
         const suggestedContainer = document.getElementById('suggested-tags');
-
+        const formData = new FormData(form);
         // 在脚本开头添加变量
         let currentUserRole = null;
+        let currentPost = null; // 当前编辑的文章 { slug, is_published }
+        const saveDraftBtn = document.getElementById('saveDraftBtn');
+        const publishBtn = document.getElementById('publishBtn');
         
     
         // 显示消息
@@ -433,41 +440,44 @@ async function loadCurrentUser() {
         async function loadPosts() {
             try {
                 const response = await fetch('/api/admin/posts');
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
+                if (!response.ok) throw new Error('加载失败');
                 const posts = await response.json();
-                if (!Array.isArray(posts)) {
-                    throw new Error('API 返回的数据不是数组');
-                }
-                
+        
+                const publishedContainer = document.getElementById('published-posts');
+                const draftContainer = document.getElementById('draft-posts');
+                publishedContainer.innerHTML = '';
+                draftContainer.innerHTML = '';
+
                 if (posts.length === 0) {
-                    postList.innerHTML = '<p style="text-align: center;">暂无文章，点击右下角新增</p>';
+                    publishedContainer.innerHTML = '<p style="text-align:center;">暂无文章</p>';
                     return;
                 }
 
-                let html = '';
                 posts.forEach(post => {
-    const displayInfo = (currentUserRole === 'superadmin') 
-        ? `<span class="slug">作者: ${post.author || '未知'}</span>`
-        : `<span class="slug">(${post.slug})</span>`;
+                    const displayInfo = (currentUserRole === 'superadmin') 
+                        ? `<span class="slug">作者: ${post.author || '未知'}</span>`
+                        : `<span class="slug">(${post.slug})</span>`;
 
-    html += `
-        <div class="post-item">
-            <div style="flex: 1;" onclick="editPost('${post.slug}')">
-                <span class="title">${post.title}</span>
-                ${displayInfo}
-            </div>
-            <div class="post-actions">
-                <button class="btn" onclick="editPost('${post.slug}')">编辑</button>
-                <button class="btn btn-danger" onclick="deletePost('${post.slug}')">删除</button>
-            </div>
-        </div>
-    `;
-});
-                postList.innerHTML = html;
+                    const html = `
+                        <div class="post-item" data-slug="${post.slug}" data-published="${post.is_published}">
+                            <div style="flex: 1;" onclick="editPost('${post.slug}')">
+                                <span class="title">${post.title}</span>
+                                ${displayInfo}
+                            </div>
+                            <div class="post-actions">
+                                <button class="btn" onclick="editPost('${post.slug}')">编辑</button>
+                                <button class="btn btn-danger" onclick="deletePost('${post.slug}')">删除</button>
+                            </div>
+                        </div>
+                    `;
+                    if (post.is_published == 1) {
+                        publishedContainer.innerHTML += html;
+                    } else {
+                        draftContainer.innerHTML += html;
+                    }
+                });
             } catch (error) {
-                postList.innerHTML = '<p style="color: red;">加载失败</p>';
+                console.error(error);
             }
         }
         // 更新输入框和推荐标签选中状态的函数
@@ -681,6 +691,117 @@ async function loadCurrentUser() {
                     }
                 }
             });
+        // 第7步：保存草稿按钮事件
+        saveDraftBtn.addEventListener('click', async () => {
+            // 获取表单数据
+            
+    
+            // 显示保存中状态（可选）
+            saveDraftBtn.disabled = true;
+            saveDraftBtn.textContent = '保存中...';
+
+            try {
+                const response = await fetch('/api/admin/post', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+        
+                if (result.success) {
+                    showMessage('草稿保存成功', 'success');
+            
+                    // 更新当前文章的 slug 和状态
+                    if (result.slug) {
+                    // 如果是新建草稿，更新隐藏字段和显示字段
+                        slugHidden.value = result.slug;
+                        if (slugDisplay) slugDisplay.value = result.slug;
+                
+                        // 更新 currentPost（如果是新建，is_published 为 false；如果是更新，保留原状态）
+                        currentPost = { 
+                            slug: result.slug, 
+                            is_published: currentPost ? currentPost.is_published : false 
+                        };
+                    }
+            
+                    // 刷新文章列表
+                    await loadPosts();
+                } else {
+                    showMessage(result.error || '保存失败', 'error');
+                }
+            } catch (error) {
+                console.error('保存草稿出错:', error);
+                showMessage('保存失败，请稍后重试', 'error');
+            } finally {
+                // 恢复按钮状态
+                saveDraftBtn.disabled = false;
+                saveDraftBtn.textContent = '保存';
+            }
+        });
+
+        // 第8步：发表按钮事件
+        publishBtn.addEventListener('click', async () => {
+            // 检查当前是否有文章选中
+            if (!currentPost) {
+                showMessage('请先选择或创建一篇文章', 'error');
+                return;
+            }
+    
+            // 检查文章是否已发表
+            if (currentPost.is_published) {
+                showMessage('该文章已发表，无需重复操作', 'error');
+                return;
+            }
+
+            // 发表前确认（可选）
+            if (!confirm('确定要发表这篇文章吗？发表后将生成正式链接并出现在首页。')) {
+                return;
+            }
+
+            // 显示发表中状态
+            publishBtn.disabled = true;
+            publishBtn.textContent = '发表中...';
+
+            try {
+                const response = await fetch('/api/admin/post/publish', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ slug: currentPost.slug })
+                });
+                const result = await response.json();
+        
+                if (result.success) {
+                    showMessage('文章发表成功', 'success');
+            
+                    // 更新当前文章信息
+                    currentPost.slug = result.newSlug;
+                    currentPost.is_published = true;
+            
+                    // 更新表单中的 slug 显示
+                    slugHidden.value = result.newSlug;
+                    if (slugDisplay) slugDisplay.value = result.newSlug;
+            
+                    // 禁用发表按钮（已发表文章不可再发表）
+                    publishBtn.disabled = true;
+                    publishBtn.style.opacity = 0.5;
+                    publishBtn.title = '文章已发表';
+            
+                    // 刷新文章列表
+                    await loadPosts();
+                } else {
+                    showMessage(result.error || '发表失败', 'error');
+                }
+            } catch (error) {
+                console.error('发表出错:', error);
+                showMessage('发表失败，请稍后重试', 'error');
+            } finally {
+                // 恢复按钮状态（如果发表失败，按钮重新启用；如果成功，按钮保持禁用状态）
+                if (!currentPost?.is_published) {
+                    publishBtn.disabled = false;
+                    publishBtn.textContent = '发表';
+                }
+            }
+        });
+        
         // 初始加载
         loadCurrentUser();
         loadPosts();
